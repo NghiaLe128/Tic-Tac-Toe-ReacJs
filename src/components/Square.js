@@ -1,10 +1,9 @@
-function Square({ value, onSquareClick }) {
-    return (
-      <button className="square" onClick={onSquareClick}>
-        {value}
-      </button>
-    );
-  }
-  
-  export default Square;
-  
+import React from 'react';
+
+const Square = (props) => (
+  <button className={`${props.winnerClass} square`} onClick={props.onClick}>
+    {props.value}
+  </button>
+);
+
+export default Square;
