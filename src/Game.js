@@ -10,6 +10,7 @@ const initialState = {
   ],
   currentStepNumber: 0,
   xIsNext: true,
+  isReversed: false, // Flag to track sort order
 };
 
 class Game extends React.Component {
@@ -48,9 +49,9 @@ class Game extends React.Component {
   }
 
   sortMoves() {
-    this.setState({
-      history: this.state.history.reverse(),
-    });
+    this.setState(prevState => ({
+      isReversed: !prevState.isReversed, // Toggle the sort order
+    }));
   }
 
   reset() {
@@ -58,18 +59,28 @@ class Game extends React.Component {
   }
 
   render() {
-    const { history } = this.state;
-    const current = history[this.state.currentStepNumber];
+    const { history, currentStepNumber, isReversed } = this.state;
+    const current = history[currentStepNumber];
     const { winner, winnerRow } = calculateWinner(current.squares);
 
-    const moves = history.map((step, move) => {
+    // Reverse the history if isReversed is true
+    const moves = (isReversed ? history.slice().reverse() : history).map((step, moveIndex) => {
+      const actualMove = isReversed ? history.length - 1 - moveIndex : moveIndex; // Adjust move index based on sorting
       const currentLocation = step.currentLocation ? `(${step.currentLocation})` : '';
       const desc = step.stepNumber ? `Go to move #${step.stepNumber}` : 'Go to game start';
-      const classButton = move === this.state.currentStepNumber ? 'button--green' : '';
+      const classButton = actualMove === currentStepNumber ? 'button--green' : '';
+
+      if (actualMove === currentStepNumber) {
+        return (
+          <li key={moveIndex}>
+            <span className="button--current-move">You are at move #{actualMove} {currentLocation}</span>
+          </li>
+        );
+      }
 
       return (
-        <li key={move}>
-          <button className={`${classButton} button`} onClick={() => this.jumpTo(move)}>
+        <li key={moveIndex}>
+          <button className={`${classButton} button`} onClick={() => this.jumpTo(actualMove)}>
             {`${desc} ${currentLocation}`}
           </button>
         </li>
