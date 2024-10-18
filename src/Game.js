@@ -10,7 +10,7 @@ const initialState = {
   ],
   currentStepNumber: 0,
   xIsNext: true,
-  isReversed: false, // Flag to track sort order
+  isReversed: false, 
 };
 
 class Game extends React.Component {
@@ -50,7 +50,7 @@ class Game extends React.Component {
 
   sortMoves() {
     this.setState(prevState => ({
-      isReversed: !prevState.isReversed, // Toggle the sort order
+      isReversed: !prevState.isReversed, 
     }));
   }
 
@@ -63,9 +63,8 @@ class Game extends React.Component {
     const current = history[currentStepNumber];
     const { winner, winnerRow } = calculateWinner(current.squares);
 
-    // Reverse the history if isReversed is true
     const moves = (isReversed ? history.slice().reverse() : history).map((step, moveIndex) => {
-      const actualMove = isReversed ? history.length - 1 - moveIndex : moveIndex; // Adjust move index based on sorting
+      const actualMove = isReversed ? history.length - 1 - moveIndex : moveIndex; 
       const currentLocation = step.currentLocation ? `(${step.currentLocation})` : '';
       const desc = step.stepNumber ? `Go to move #${step.stepNumber}` : 'Go to game start';
       const classButton = actualMove === currentStepNumber ? 'button--green' : '';
